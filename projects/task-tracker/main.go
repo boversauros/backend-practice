@@ -121,19 +121,35 @@ func addTask(description string) {
 }
 
 func updateTask(id int, description string, completed bool) {
+    taskFound := false
+
 	for i, task := range tasks {
 		if task.id == id {
 			tasks[i] = Task{id: id, Description: description, Completed: completed}
+            taskFound = true
+            break
 		}
 	}
+
+    if !taskFound {
+        fmt.Printf("Error: Task with ID %d not found\n", id)
+    }
 }
 
 func deleteTask(id int) {
+    taskFound := false
+
 	for i, task := range tasks {
 		if task.id == id {
 			tasks = append(tasks[:i], tasks[i+1:]...)
-		}
+            taskFound = true
+            break
+		} 
 	}
+
+    if !taskFound {
+        fmt.Printf("Error: Task with ID %d not found\n", id)
+    }
 }
 
 func listTasks() {
