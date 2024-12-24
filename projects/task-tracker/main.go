@@ -68,15 +68,17 @@ func main() {
         case "update":
             if len(parameters) < 2 {
                 fmt.Println("Error: Please provide a task ID and description")
-            } else {
-                taskID, err := strconv.Atoi(parameters[0])
-                if err != nil {
-                    fmt.Println("Error: Invalid task ID")
-                    continue
-                }
-                taskDescription := strings.Join(parameters[1:], " ")
-                updateTask(taskID, taskDescription, false)
+                break
+            }  
+
+            taskID, err := strconv.Atoi(parameters[0])
+            if err != nil {
+                fmt.Println("Error: Invalid task ID")
+                break
             }
+            taskDescription := strings.Join(parameters[1:], " ")
+            updateTask(taskID, taskDescription, false)
+            
         case "delete":
             if len(parameters) == 0 {
                 fmt.Println("Error: Please provide a task ID")
