@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -45,10 +46,25 @@ func main() {
         case "add":
             if len(parameters) == 0 {
                 fmt.Println("Error: Please provide a task description")
-            } else {
-                taskDescription := strings.Join(parameters, " ")
-                addTask(taskDescription)
+                break
             }
+    
+            input := strings.Join(parameters, " ")
+            re := regexp.MustCompile(`"([^"]*)"`)
+            matches := re.FindStringSubmatch(input)
+
+            if len(matches) < 2 {
+                fmt.Println("Error: Task description must be enclosed in double quotes")
+                break
+            }
+
+            taskDescription := matches[1] 
+            if taskDescription == "" { 
+                fmt.Println("Error: Task description cannot be empty")
+                break
+            }
+            addTask(taskDescription)
+            
         case "update":
             if len(parameters) < 2 {
                 fmt.Println("Error: Please provide a task ID and description")
@@ -68,7 +84,7 @@ func main() {
                 taskID, err := strconv.Atoi(parameters[0])
                 if err != nil {
                     fmt.Println("Error: Invalid task ID")
-                    continue
+                    continue    
                 }
                 deleteTask(taskID)
             }
@@ -98,6 +114,7 @@ func main() {
 func addTask(description string) {
 	id := len(tasks) + 1
 	tasks = append(tasks, Task{id: id, Description: description, Completed: false})
+    fmt.Printf("Task added successfully (ID: %d)\n", id)
 }
 
 func updateTask(id int, description string, completed bool) {
