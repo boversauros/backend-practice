@@ -30,7 +30,7 @@ func main() {
         
         if len(words) == 0 {
             fmt.Print("task-cli > ")
-            continue
+            break
         }
         
         command := words[0]
