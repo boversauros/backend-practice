@@ -82,14 +82,15 @@ func main() {
         case "delete":
             if len(parameters) == 0 {
                 fmt.Println("Error: Please provide a task ID")
-            } else {
-                taskID, err := strconv.Atoi(parameters[0])
-                if err != nil {
-                    fmt.Println("Error: Invalid task ID")
-                    continue    
-                }
-                deleteTask(taskID)
+                break
+            } 
+            taskID, err := strconv.Atoi(parameters[0])
+            if err != nil {
+                fmt.Println("Error: Invalid task ID")
+                break   
             }
+            deleteTask(taskID)
+        
         case "help":
             fmt.Println("Available commands:")
             fmt.Println("  list - List all tasks")
