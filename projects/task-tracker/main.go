@@ -25,8 +25,6 @@ var tasksFile string
 func init() {
     _, currentFile, _, _ := runtime.Caller(0)
     sourceDir := filepath.Dir(currentFile)
-    println(currentFile)
-    println(sourceDir)
     tasksFile = filepath.Join(sourceDir, "tasks.json")
 }
 
