@@ -12,9 +12,9 @@ import (
 type TaskStatus string
 
 const (
-    Todo TaskStatus = "todo"
-    InProgress TaskStatus = "in_progress"
-    Done TaskStatus = "done"
+    StatusTodo TaskStatus = "todo"
+    StatusInProgress TaskStatus = "in_progress"
+    StatusDone TaskStatus = "done"
 )
 
 
@@ -103,7 +103,7 @@ func main() {
                 fmt.Println("Error: Invalid task ID")
                 break
             }
-            updateTaskStatus(taskID, InProgress)
+            updateTaskStatus(taskID, StatusInProgress)
 
         case "mark-done":
             if len(parameters) == 0 {
@@ -115,7 +115,7 @@ func main() {
                 fmt.Println("Error: Invalid task ID")
                 break
             }
-            updateTaskStatus(taskID, Done)
+            updateTaskStatus(taskID, StatusDone)
         
         case "delete":
             if len(parameters) == 0 {
@@ -157,7 +157,7 @@ func main() {
 
 func addTask(description string) {
 	id := len(tasks) + 1
-	tasks = append(tasks, Task{id: id, Description: description, Status: "todo"})
+	tasks = append(tasks, Task{id: id, Description: description, Status: StatusTodo})
     fmt.Printf("Task added successfully (ID: %d)\n", id)
 }
 
