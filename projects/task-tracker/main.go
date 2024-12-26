@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
@@ -17,14 +18,14 @@ const (
     StatusDone TaskStatus = "done"
 )
 
+const tasksFile = "tasks.json"
+
 
 type Task struct {
-	id 		int
-	Description string
-	Status TaskStatus  
+    ID 		int  `json:"id"`
+	Description string `json:"description"`
+	Status TaskStatus  `json:"status"`
 }
-
-var tasks []Task
 
 func main() {
     scanner := bufio.NewScanner(os.Stdin)
@@ -46,6 +47,12 @@ func main() {
 
         switch command {
         case "list", "ls":
+            tasks, err := readTasks()
+            if err != nil {
+                fmt.Printf("Error: %v\n", err)
+                break
+            }
+
             if len (tasks) == 0 {
                 fmt.Println("No tasks found")
                 break
@@ -154,62 +161,151 @@ func main() {
     }
 }
 
+func readTasks() ([]Task, error) {
+    if _, err := os.Stat(tasksFile); os.IsNotExist(err) {
+        return []Task{}, nil
+    }
+
+    data, err := os.ReadFile(tasksFile)
+    if err != nil {
+        return nil, err
+    }
+    
+    if len(data) == 0 {
+        return []Task{}, nil
+    }    
+    
+    var tasks []Task
+	err = json.Unmarshal(data, &tasks)
+    if err != nil {
+        return nil, fmt.Errorf("error reading tasks: %v", err)
+    }
+
+    return tasks, nil
+}
+
+func writeTasks(tasks []Task) error {
+    data, err := json.MarshalIndent(tasks, "", "  ")
+    if err != nil {
+        return fmt.Errorf("error reading tasks: %v", err)
+    }
+
+    err = os.WriteFile(tasksFile, data, 0644)
+    if err != nil {
+        return fmt.Errorf("error writing tasks: %v", err)
+    }
+
+    return nil
+}
 
 func addTask(description string) {
+    tasks, err := readTasks()
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+
 	id := len(tasks) + 1
-	tasks = append(tasks, Task{id: id, Description: description, Status: StatusTodo})
+	tasks = append(tasks, Task{ID: id, Description: description, Status: StatusTodo})
+    err = writeTasks(tasks)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+
     fmt.Printf("Task added successfully (ID: %d)\n", id)
 }
 
 func updateTaskDescription(id int, description string) {
-    taskFound := false
+    tasks, err := readTasks()
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
 
+    taskFound := false
 	for i, task := range tasks {
-		if task.id == id {
-			tasks[i] = Task{id: id, Description: description}
+		if task.ID == id {
+			tasks[i] = Task{ID: id, Description: description}
             taskFound = true
             break
 		}
 	}
 
-    if !taskFound {
+    if taskFound {
+        err = writeTasks(tasks)
+        if err != nil {
+            fmt.Printf("Error: %v\n", err)
+            return
+        }
+    } else {
         fmt.Printf("Error: Task with ID %d not found\n", id)
     }
 }
 
 func updateTaskStatus(id int, status TaskStatus) {
+    tasks, err := readTasks()
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    
     taskFound := false
-
 	for i, task := range tasks {
-		if task.id == id {
-			tasks[i] = Task{id: id, Status: status}
+		if task.ID == id {
+			tasks[i] = Task{ID: id, Status: status}
             taskFound = true
             break
 		}
 	}
 
-    if !taskFound {
+    if taskFound {
+        err = writeTasks(tasks)
+        if err != nil {
+            fmt.Printf("Error: %v\n", err)
+            return
+        }
+    } else {
         fmt.Printf("Error: Task with ID %d not found\n", id)
+
     }
 }
 
 func deleteTask(id int) {
+    tasks, err := readTasks()
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
     taskFound := false
-
 	for i, task := range tasks {
-		if task.id == id {
+		if task.ID == id {
 			tasks = append(tasks[:i], tasks[i+1:]...)
             taskFound = true
             break
 		} 
 	}
 
-    if !taskFound {
+    if taskFound {
+        err = writeTasks(tasks)
+        if err != nil {
+            fmt.Printf("Error: %v\n", err)
+            return
+        }
+    } else {
         fmt.Printf("Error: Task with ID %d not found\n", id)
     }
 }
 
 func listTasks(status *TaskStatus) {
+    tasks, err := readTasks()
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+
     var matchingTasks []Task
 
     if status == nil {
@@ -228,6 +324,6 @@ func listTasks(status *TaskStatus) {
     }
 
     for _, task := range matchingTasks {
-        fmt.Printf("%d: %s [%s]\n", task.id, task.Description, task.Status)
+        fmt.Printf("%d: %s [%s]\n", task.ID, task.Description, task.Status)
     }
 }
