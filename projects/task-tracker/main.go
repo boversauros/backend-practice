@@ -268,7 +268,6 @@ func updateTaskStatus(id int, status TaskStatus) {
         }
     } else {
         fmt.Printf("Error: Task with ID %d not found\n", id)
-
     }
 }
 
