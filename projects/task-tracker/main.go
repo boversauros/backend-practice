@@ -210,22 +210,24 @@ func deleteTask(id int) {
 }
 
 func listTasks(status *TaskStatus) {
+    var matchingTasks []Task
+
     if status == nil {
-        for _, task := range(tasks) {
-            fmt.Printf("%d: %s - %s\n", task.id, task.Description, task.Status)
+        matchingTasks = tasks
+    } else {
+        for _, task := range tasks {
+            if task.Status == *status {
+                matchingTasks = append(matchingTasks, task)
+            }
         }
+    }
+
+    if len(matchingTasks) == 0 {
+        fmt.Println("No tasks found")
         return
     }
 
-    found := false
-    for _, task := range(tasks) {
-        if task.Status == *status {
-            fmt.Printf("%d: %s - %s\n", task.id, task.Description, task.Status)
-            found = true
-        }
-    }
-
-    if !found {
-        fmt.Printf("No tasks found with status %s\n", *status)
+    for _, task := range matchingTasks {
+        fmt.Printf("%d: %s [%s]\n", task.id, task.Description, task.Status)
     }
 }
