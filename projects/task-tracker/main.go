@@ -46,10 +46,16 @@ func main() {
 
         switch command {
         case "list", "ls":
-            if len(tasks) == 0 {
-                fmt.Println("You have no tasks!")
-            } else { 
-                listTasks()
+            if len (tasks) == 0 {
+                fmt.Println("No tasks found")
+                break
+            }
+
+            if len(parameters) == 0 {
+                listTasks(nil)
+            } else {
+                status := TaskStatus(parameters[0])
+                listTasks(&status)
             }
         case "add":
             if len(parameters) == 0 {
@@ -202,8 +208,23 @@ func deleteTask(id int) {
     }
 }
 
-func listTasks() {
-	for _, task := range(tasks) {
-		fmt.Printf("%d: %s - %s\n", task.id, task.Description, task.Status)
-	}
+func listTasks(status *TaskStatus) {
+    if status == nil {
+        for _, task := range(tasks) {
+            fmt.Printf("%d: %s - %s\n", task.id, task.Description, task.Status)
+        }
+        return
+    }
+
+    found := false
+    for _, task := range(tasks) {
+        if task.Status == *status {
+            fmt.Printf("%d: %s - %s\n", task.id, task.Description, task.Status)
+            found = true
+        }
+    }
+
+    if !found {
+        fmt.Printf("No tasks found with status %s\n", *status)
+    }
 }
