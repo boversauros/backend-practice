@@ -131,7 +131,8 @@ func main() {
         
         case "help":
             fmt.Println("Available commands:")
-            fmt.Println("  list or ls - List all tasks")
+            fmt.Println("  list - List all tasks")
+            fmt.Println("  list <status> - List tasks with a specific status")
             fmt.Println("  add <task description> - Add a new task")
             fmt.Println("  update <task ID> <new task description> - Update a task description")
             fmt.Println("  mark-in-progress <task ID> - Mark a task as in progress")
