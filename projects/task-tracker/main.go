@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 )
@@ -18,8 +20,15 @@ const (
     StatusDone TaskStatus = "done"
 )
 
-const tasksFile = "tasks.json"
+var tasksFile string
 
+func init() {
+    _, currentFile, _, _ := runtime.Caller(0)
+    sourceDir := filepath.Dir(currentFile)
+    println(currentFile)
+    println(sourceDir)
+    tasksFile = filepath.Join(sourceDir, "tasks.json")
+}
 
 type Task struct {
     ID 		int  `json:"id"`
