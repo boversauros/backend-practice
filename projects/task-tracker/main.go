@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type TaskStatus string
@@ -32,6 +33,8 @@ type Task struct {
     ID 		int  `json:"id"`
 	Description string `json:"description"`
 	Status TaskStatus  `json:"status"`
+    CreatedAt time.Time `json:"created_at"`
+    UpdatedAt time.Time `json:"updated_at"`
 }
 
 func main() {
@@ -213,7 +216,9 @@ func addTask(description string) {
     }
 
 	id := len(tasks) + 1
-	tasks = append(tasks, Task{ID: id, Description: description, Status: StatusTodo})
+    createdAt := time.Now()
+    updatedAt := time.Now()
+	tasks = append(tasks, Task{ID: id, Description: description, Status: StatusTodo, CreatedAt: createdAt, UpdatedAt: updatedAt})
     err = writeTasks(tasks)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
@@ -233,7 +238,8 @@ func updateTaskDescription(id int, description string) {
     taskFound := false
 	for i, task := range tasks {
 		if task.ID == id {
-			tasks[i] = Task{ID: id, Description: description}
+			tasks[i].Description = description
+            tasks[i].UpdatedAt = time.Now()
             taskFound = true
             break
 		}
@@ -261,7 +267,8 @@ func updateTaskStatus(id int, status TaskStatus) {
     taskFound := false
 	for i, task := range tasks {
 		if task.ID == id {
-			tasks[i] = Task{ID: id, Status: status}
+            tasks[i].Status = status
+            tasks[i].UpdatedAt = time.Now()
             taskFound = true
             break
 		}
