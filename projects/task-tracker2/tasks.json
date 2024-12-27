@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "description": "\"whatever haha\"",
+    "status": "todo",
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "2024-12-26T20:27:55.564334+01:00"
+  },
+  {
+    "id": 2,
+    "description": "whatever",
+    "status": "todo",
+    "created_at": "2024-12-26T20:27:40.166439+01:00",
+    "updated_at": "2024-12-26T20:27:40.166439+01:00"
+  }
+]
