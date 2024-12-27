@@ -60,6 +60,11 @@ func (h *Handler) handleCommand(userInput string) error {
 			return fmt.Errorf("%v", err)
 		}
 
+		if len(tasks) == 0 {
+			fmt.Println("No tasks found")
+			break
+		}
+
 		for _, t := range tasks {
 			fmt.Printf("%d. %s - %s\n", t.ID, t.Description, t.Status)
 		}

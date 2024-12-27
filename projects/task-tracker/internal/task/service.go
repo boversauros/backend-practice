@@ -31,10 +31,6 @@ func (s *Service) GetTasks(status *Status) ([]Task, error) {
         }
     }
 
-    if len(matchingTasks) == 0 {
-        return nil, fmt.Errorf("no tasks found")
-    }
-
     return matchingTasks, nil
 }
 
