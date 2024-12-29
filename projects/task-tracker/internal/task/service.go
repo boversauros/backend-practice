@@ -88,7 +88,7 @@ func (s *Service) UpdateTaskDescription(id int, description string) error {
 	return nil
 }
 
-func (s *Service) updateTaskStatus(id int, status Status) error {
+func (s *Service) UpdateTaskStatus(id int, status Status) error {
     tasks, err := s.storage.ReadAll()
 	if err != nil {
 		return fmt.Errorf("error reading tasks: %v", err)

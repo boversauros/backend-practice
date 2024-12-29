@@ -67,7 +67,7 @@ func (h *Handler) handleCommand(userInput string) error {
 		}
 
 		for _, t := range tasks {
-			fmt.Printf("%d. %s - %s\n", t.ID, t.Description, t.Status)
+			fmt.Printf("%d. %s [%s]\n", t.ID, t.Description, t.Status)
 		}
 
 	case "add":
@@ -127,6 +127,22 @@ func (h *Handler) handleCommand(userInput string) error {
 			return fmt.Errorf("error updating task: %v", err)
 		}
 	
+	case "mark-in-progress":
+		if len(parameters) == 0 {
+			fmt.Println("Error: Please provide a task ID")
+			break
+		}
+		taskID, err := strconv.Atoi(parameters[0])
+		if err != nil {
+			fmt.Println("Error: Invalid task ID")
+			break
+		}
+
+		err = h.service.UpdateTaskStatus(taskID, task.StatusInProgress)
+		if err != nil {
+			return fmt.Errorf("error updating task: %v", err)
+		}
+
 	case "help":
 		fmt.Println("Available commands:")
 		fmt.Println("  list - List all tasks")
