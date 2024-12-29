@@ -34,8 +34,6 @@ func (s *Service) GetTasks(status *Status) ([]Task, error) {
     return matchingTasks, nil
 }
 
-
-
 func (s *Service) AddTask(description string) (int, error){
 	tasks, err := s.storage.ReadAll()
     if err != nil {
@@ -115,7 +113,6 @@ func (s *Service) UpdateTaskStatus(id int, status Status) error {
 
 	return nil
 }
-
 
 func (s *Service) DeleteTask(id int) error {
     tasks, err := s.storage.ReadAll()

@@ -6,7 +6,6 @@ import (
 	"os"
 )
 
-
 type Storage interface {
 	ReadAll() ([]Task, error)
 	Save(tasks []Task) error
