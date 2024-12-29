@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"task-tracker/internal/task"
 )
@@ -95,6 +96,36 @@ func (h *Handler) handleCommand(userInput string) error {
 		}
 
 		fmt.Printf("Task added successfully (ID: %d)\n", id)
+	case "update":
+		if len(parameters) < 2 {
+			fmt.Println("Error: Please provide a task ID and description")
+			break
+		}  
+
+		taskID, err := strconv.Atoi(parameters[0])
+		if err != nil {
+			fmt.Println("Error: Invalid task ID")
+			break
+		}
+		input := strings.Join(parameters[1:], " ")
+		re := regexp.MustCompile(`"([^"]*)"`)
+		matches := re.FindStringSubmatch(input)
+
+		if len(matches) < 2 {
+			fmt.Println("Error: Task description must be enclosed in double quotes")
+			break
+		}
+
+		taskDescription := matches[1]
+		if taskDescription == "" {
+			fmt.Println("Error: Task description cannot be empty")
+			break
+		}
+
+		err = h.service.UpdateTaskDescription(taskID, taskDescription)
+		if err != nil {
+			return fmt.Errorf("error updating task: %v", err)
+		}
 	
 	case "help":
 		fmt.Println("Available commands:")
