@@ -142,6 +142,21 @@ func (h *Handler) handleCommand(userInput string) error {
 		if err != nil {
 			return fmt.Errorf("error updating task: %v", err)
 		}
+	
+	case "mark-done":
+		if len(parameters) == 0 {
+			fmt.Println("Error: Please provide a task ID")
+			break
+		}
+		taskID, err := strconv.Atoi(parameters[0])
+		if err != nil {
+			fmt.Println("Error: Invalid task ID")
+			break
+		}
+		err = h.service.UpdateTaskStatus(taskID, task.StatusDone)
+		if err != nil {
+			return fmt.Errorf("error updating task: %v", err)
+		}
 
 	case "help":
 		fmt.Println("Available commands:")
