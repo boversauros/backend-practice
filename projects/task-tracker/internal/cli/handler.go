@@ -155,7 +155,23 @@ func (h *Handler) handleCommand(userInput string) error {
 		}
 		err = h.service.UpdateTaskStatus(taskID, task.StatusDone)
 		if err != nil {
-			return fmt.Errorf("error updating task: %v", err)
+			return fmt.Errorf("%v", err)
+		}
+
+	case "delete":
+		if len(parameters) == 0 {
+			fmt.Println("Error: Please provide a task ID")
+			break
+		} 
+		taskID, err := strconv.Atoi(parameters[0])
+		if err != nil {
+			fmt.Println("Error: Invalid task ID")
+			break   
+		}
+		
+		err = h.service.DeleteTask(taskID)
+		if err != nil {
+			return fmt.Errorf("%v", err)
 		}
 
 	case "help":

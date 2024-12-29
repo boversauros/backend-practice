@@ -16,7 +16,7 @@ func NewService(storage Storage) *Service {
 func (s *Service) GetTasks(status *Status) ([]Task, error) {
     tasks, err := s.storage.ReadAll()
 	if err != nil {
-		return nil, fmt.Errorf("error reading tasks: %v", err)
+		return nil, fmt.Errorf("Reading tasks: %v", err)
 	}
 
     var matchingTasks []Task
@@ -39,7 +39,7 @@ func (s *Service) GetTasks(status *Status) ([]Task, error) {
 func (s *Service) AddTask(description string) (int, error){
 	tasks, err := s.storage.ReadAll()
     if err != nil {
-        return 0, fmt.Errorf("error reading tasks: %v", err)
+        return 0, fmt.Errorf("Reading tasks: %v", err)
     }
 
 	now := time.Now()
@@ -54,7 +54,7 @@ func (s *Service) AddTask(description string) (int, error){
 	tasks = append(tasks, newTask)
 	err = s.storage.Save(tasks)
 	if err != nil {
-		return 0, fmt.Errorf("error saving tasks: %v", err)
+		return 0, fmt.Errorf("Saving tasks: %v", err)
 	}
 
 	return newTask.ID, nil
@@ -63,7 +63,7 @@ func (s *Service) AddTask(description string) (int, error){
 func (s *Service) UpdateTaskDescription(id int, description string) error {
     tasks, err := s.storage.ReadAll()
     if err != nil {
-        return fmt.Errorf("error reading tasks: %v", err)
+        return fmt.Errorf("Reading tasks: %v", err)
     }
 
     taskFound := false
@@ -79,10 +79,10 @@ func (s *Service) UpdateTaskDescription(id int, description string) error {
     if taskFound {
         err = s.storage.Save(tasks)
         if err != nil {
-            return fmt.Errorf("error saving tasks: %v", err)
+            return fmt.Errorf("Saving tasks: %v", err)
         }
     } else {
-		return fmt.Errorf("Error: Task with ID %d not found\n", id)
+		return fmt.Errorf("Task with ID %d not found\n", id)
     }
 
 	return nil
@@ -91,7 +91,7 @@ func (s *Service) UpdateTaskDescription(id int, description string) error {
 func (s *Service) UpdateTaskStatus(id int, status Status) error {
     tasks, err := s.storage.ReadAll()
 	if err != nil {
-		return fmt.Errorf("error reading tasks: %v", err)
+		return fmt.Errorf("Reading tasks: %v", err)
 	}
         
     taskFound := false
@@ -107,10 +107,10 @@ func (s *Service) UpdateTaskStatus(id int, status Status) error {
     if taskFound {
         err = s.storage.Save(tasks)
 		if err != nil {
-			return fmt.Errorf("error saving tasks: %v", err)
+			return fmt.Errorf("Saving tasks: %v", err)
 		}
     } else {
-		return fmt.Errorf("Error: Task with ID %d not found\n", id)
+		return fmt.Errorf("Task with ID %d not found\n", id)
     }
 
 	return nil
@@ -120,7 +120,7 @@ func (s *Service) UpdateTaskStatus(id int, status Status) error {
 func (s *Service) DeleteTask(id int) error {
     tasks, err := s.storage.ReadAll()
 	if err != nil {
-		return fmt.Errorf("error reading tasks: %v", err)
+		return fmt.Errorf("Reading tasks: %v", err)
 	}
     
     taskFound := false
@@ -135,10 +135,10 @@ func (s *Service) DeleteTask(id int) error {
     if taskFound {
         err = s.storage.Save(tasks)
         if err != nil {
-            return fmt.Errorf("error saving tasks: %v", err)
+            return fmt.Errorf("Saving tasks: %v", err)
         }
     } else {
-        return fmt.Errorf("Error: Task with ID %d not found\n", id)
+        return fmt.Errorf("Task with ID %d not found\n", id)
     }
 
 	return nil
